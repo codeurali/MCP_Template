@@ -1,6 +1,6 @@
 # MCP Template
 
-Universal, manifesto-driven starter for deterministic MCP servers.
+Universal starter MCP servers.
 
 ## 2-Minute Quickstart
 
