@@ -45,7 +45,7 @@ Then implement your first domain:
 | 12. Keep Determinism | [src/tools/example.tools.ts](src/tools/example.tools.ts), [src/example-client/client.ts](src/example-client/client.ts) | No hidden LLM calls or randomness |
 | 13. Avoid Smart Routers | [src/server.ts](src/server.ts), [src/tools/tool-registry.ts](src/tools/tool-registry.ts) | No implicit routing logic |
 | 14. Respect LLM Limitations | [src/tools/example.tools.ts](src/tools/example.tools.ts) | Small schemas, bounded list sizes |
-| 15. Optimize for Debuggability | [tests/unit/example.tools.test.ts](tests/unit/example.tools.test.ts), [tests/integration/tool-pipeline.integration.test.ts](tests/integration/tool-pipeline.integration.test.ts) | Direct tests for contracts and branches |
+| 15. Optimise for Debuggability | [tests/unit/example.tools.test.ts](tests/unit/example.tools.test.ts), [tests/integration/tool-pipeline.integration.test.ts](tests/integration/tool-pipeline.integration.test.ts) | Direct tests for contracts and branches |
 
 ## Included MCP Tools
 
@@ -70,7 +70,7 @@ Validated on **2026-02-27**.
 | Client | Transport | Status | Notes |
 |---|---|---|---|
 | Codex | Stdio | Ready | Uses `SKILL.md` and can call the built server binary |
-| GitHub Copilot | MCP/Tool integration | Ready | Reads `.github/copilot-instructions.md` for behavior |
+| GitHub Copilot | MCP/Tool integration | Ready | Reads `.github/copilot-instructions.md` for behaviour |
 | Claude Desktop | Stdio | Ready | Uses `CLAUDE.md` style guidance; add server in Claude config |
 | Cursor | Stdio | Ready | Works with MCP-compatible local server registration |
 | VS Code MCP-compatible clients | Stdio | Ready | Use `node dist/server.js` entrypoint |

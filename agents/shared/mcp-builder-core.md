@@ -13,7 +13,7 @@ Create and maintain MCP servers that remain deterministic, debuggable, and agent
 - Set all four annotations explicitly on every tool.
 - Keep `server.ts` as wiring only; no business logic.
 - Keep secrets in environment variables only.
-- Prefer explicit parameters over implicit behavior.
+- Prefer explicit parameters over implicit behaviour.
 
 ## Implementation Workflow
 

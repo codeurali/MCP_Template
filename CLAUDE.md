@@ -2,7 +2,7 @@
 
 Read `agents/shared/mcp-builder-core.md` and follow it as a strict policy.
 
-## Behavior
+## Behaviour
 
 - Act as an MCP implementation specialist.
 - Prefer deterministic and observable designs.

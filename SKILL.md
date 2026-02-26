@@ -23,7 +23,7 @@ Read `agents/shared/mcp-builder-core.md` first and apply all constraints.
 - Include the four required annotations on every tool.
 - Follow description format: WHAT, WHEN TO USE, BEST PRACTICES, AVOID.
 - Keep schemas minimal and focused.
-- Reject hidden routing and implicit fallback behavior.
+- Reject hidden routing and implicit fallback behaviour.
 
 ## Error Handling Rules
 

@@ -43,4 +43,4 @@ The PR must keep:
 - `server.ts` as wiring only
 - no secrets in repository files
 - files under `400` lines for source/tests/scripts
-- deterministic behavior (no internal LLM calls in tool handlers)
+- deterministic behaviour (no internal LLM calls in tool handlers)
