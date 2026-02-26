@@ -1,0 +1,5 @@
+version: 1
+skill:
+  display_name: MCP Builder
+  short_description: Build deterministic MCP servers with atomic tools and strict validation.
+  default_prompt: Build or extend this MCP server using atomic tools, explicit schemas, structured outputs, and complete tests.

@@ -1,0 +1,30 @@
+{
+  "name": "mcp-template-server",
+  "version": "0.1.0",
+  "description": "Manifesto-driven MCP template with atomic tools and structured outputs.",
+  "entry": "dist/server.js",
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "API_BASE_URL": {
+        "type": "string",
+        "description": "HTTPS base URL for the upstream API"
+      },
+      "API_TOKEN": {
+        "type": "string",
+        "description": "Bearer token for upstream API authentication"
+      },
+      "TIMEOUT_MS": {
+        "type": "number",
+        "description": "HTTP timeout in milliseconds",
+        "default": 30000
+      },
+      "MAX_RETRIES": {
+        "type": "number",
+        "description": "Retry count for retryable upstream failures",
+        "default": 3
+      }
+    },
+    "required": ["API_BASE_URL", "API_TOKEN"]
+  }
+}
