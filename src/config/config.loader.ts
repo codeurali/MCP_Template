@@ -1,5 +1,5 @@
-import type { CliConfig, Config } from "./config.schema.js";
-import { CliConfigSchema, ConfigSchema } from "./config.schema.js";
+import type { CliConfig, Config, HttpConfig } from "./config.schema.js";
+import { CliConfigSchema, ConfigSchema, HttpConfigSchema } from "./config.schema.js";
 
 function parseOptionalNumber(value: string | undefined, name: string): number | undefined {
   if (value === undefined || value.trim() === "") {
@@ -36,5 +36,28 @@ export function loadCliConfig(env: NodeJS.ProcessEnv = process.env): CliConfig {
     cliBaseArgs,
     cwd: env.CLI_CWD,
     timeoutMs: parseOptionalNumber(env.CLI_TIMEOUT_MS, "CLI_TIMEOUT_MS")
+  });
+}
+
+// ── Streamable HTTP transport loader ─────────────────────────────────────────
+// Optional env vars: HTTP_PORT, HTTP_HOST, HTTP_ALLOWED_HOSTS,
+// HTTP_ALLOWED_ORIGINS (comma-separated lists).
+function parseList(value: string | undefined): string[] {
+  if (!value?.trim()) {
+    return [];
+  }
+
+  return value
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter((entry) => entry.length > 0);
+}
+
+export function loadHttpConfig(env: NodeJS.ProcessEnv = process.env): HttpConfig {
+  return HttpConfigSchema.parse({
+    port: parseOptionalNumber(env.HTTP_PORT, "HTTP_PORT"),
+    host: env.HTTP_HOST?.trim() || undefined,
+    allowedHosts: parseList(env.HTTP_ALLOWED_HOSTS),
+    allowedOrigins: parseList(env.HTTP_ALLOWED_ORIGINS)
   });
 }

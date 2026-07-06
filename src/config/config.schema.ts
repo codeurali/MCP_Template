@@ -31,3 +31,21 @@ export const CliConfigSchema = z.object({
 });
 
 export type CliConfig = z.infer<typeof CliConfigSchema>;
+
+// ── Streamable HTTP transport config ─────────────────────────────────────────
+// Used by http-server.ts to expose the same tools over the MCP Streamable
+// HTTP transport (spec revision 2025-03-26+) instead of stdio.
+export const HttpConfigSchema = z.object({
+  // TCP port to listen on.
+  port: z.number().int().min(1).max(65_535).default(3000),
+  // Bind address. Keep 127.0.0.1 unless deploying behind a reverse proxy.
+  host: z.string().min(1).default("127.0.0.1"),
+  // Host headers accepted by DNS-rebinding protection (spec requires
+  // rejecting invalid Origin/Host). Extend via HTTP_ALLOWED_HOSTS when
+  // serving on a public hostname.
+  allowedHosts: z.array(z.string().min(1)).default([]),
+  // Origin headers accepted for browser-based clients (HTTP_ALLOWED_ORIGINS).
+  allowedOrigins: z.array(z.string().min(1)).default([])
+});
+
+export type HttpConfig = z.infer<typeof HttpConfigSchema>;
