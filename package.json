@@ -5,7 +5,8 @@
   "type": "module",
   "main": "dist/server.js",
   "bin": {
-    "mcp-template-server": "dist/server.js"
+    "mcp-template-server": "dist/server.js",
+    "mcp-cli-poc-server": "dist/cli-server.js"
   },
   "files": [
     "dist",
