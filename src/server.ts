@@ -1,9 +1,15 @@
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+/**
+ * server.ts — stdio entry point for the API-backed template server.
+ *
+ * Transport selection lives here; everything else (capabilities, request
+ * handlers, resources) is wired by `createMcpServer` in server-factory.ts.
+ */
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 import { EnvTokenAuthProvider } from "./auth/env-token-auth-provider.js";
 import { ExampleApiClient } from "./example-client/client.js";
 import { loadConfig } from "./config/config.loader.js";
+import { ResourceProvider } from "./resources/resource-provider.js";
+import { createMcpServer } from "./server-factory.js";
 import { exampleTools, handleExampleTool } from "./tools/example.tools.js";
 import { ToolRegistry } from "./tools/tool-registry.js";
 
@@ -18,32 +24,14 @@ export async function startServer(): Promise<void> {
     handler: handleExampleTool
   });
 
-  const server = new Server(
-    {
-      name: "mcp-template-server",
-      version: "0.1.0"
-    },
-    {
-      capabilities: {
-        tools: {}
-      }
-    }
-  );
-
-  server.setRequestHandler(ListToolsRequestSchema, async () => {
-    return {
-      tools: registry.listDefinitions() as any
-    };
-  });
-
-  server.setRequestHandler(CallToolRequestSchema, async (request) => {
-    const result = await registry.call(
-      request.params.name,
-      request.params.arguments ?? {},
-      client
-    );
-
-    return result as any;
+  const server = createMcpServer({
+    name: "mcp-template-server",
+    version: "0.1.0",
+    description:
+      "Manifesto-driven MCP template with atomic tools and structured outputs.",
+    registry,
+    client,
+    resources: new ResourceProvider()
   });
 
   const transport = new StdioServerTransport();

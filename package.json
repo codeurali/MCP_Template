@@ -6,7 +6,8 @@
   "main": "dist/server.js",
   "bin": {
     "mcp-template-server": "dist/server.js",
-    "mcp-cli-poc-server": "dist/cli-server.js"
+    "mcp-template-cli-server": "dist/cli-server.js",
+    "mcp-template-http-server": "dist/http-server.js"
   },
   "files": [
     "dist",
