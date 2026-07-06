@@ -1,3 +1,5 @@
+import { ZodError } from "zod";
+
 export interface ToolAnnotations {
   readOnlyHint: boolean;
   destructiveHint: boolean;
@@ -5,15 +7,19 @@ export interface ToolAnnotations {
   openWorldHint: boolean;
 }
 
+export interface JsonObjectSchema {
+  type: "object";
+  properties?: Record<string, unknown>;
+  required?: string[];
+  additionalProperties?: boolean;
+}
+
 export interface ToolDefinition {
   name: string;
+  title?: string;
   description: string;
-  inputSchema: {
-    type: "object";
-    properties?: Record<string, unknown>;
-    required?: string[];
-    additionalProperties?: boolean;
-  };
+  inputSchema: JsonObjectSchema;
+  outputSchema?: JsonObjectSchema;
   annotations: ToolAnnotations;
 }
 
@@ -22,6 +28,7 @@ export interface ToolResult {
     type: "text";
     text: string;
   }>;
+  structuredContent?: Record<string, unknown>;
   isError?: boolean;
 }
 
@@ -34,6 +41,33 @@ export type ToolHandler<TClient> = (
 export interface ToolModule<TClient> {
   tools: ToolDefinition[];
   handler: ToolHandler<TClient>;
+}
+
+function formatValidationError(toolName: string, error: ZodError): ToolResult {
+  const issues = error.issues.map((issue) => ({
+    path: issue.path.join(".") || "(root)",
+    message: issue.message
+  }));
+
+  return {
+    content: [
+      {
+        type: "text",
+        text: JSON.stringify(
+          {
+            summary: `Invalid input for tool ${toolName}.`,
+            data: { error: "VALIDATION_ERROR", issues },
+            suggestions: [
+              "Fix the listed fields and call the tool again with corrected arguments."
+            ]
+          },
+          null,
+          2
+        )
+      }
+    ],
+    isError: true
+  };
 }
 
 export class ToolRegistry<TClient> {
@@ -61,6 +95,16 @@ export class ToolRegistry<TClient> {
       throw new Error(`Unknown tool: ${name}`);
     }
 
-    return handler(name, args, client);
+    try {
+      return await handler(name, args, client);
+    } catch (error) {
+      // Per MCP spec (SEP-1303): input validation failures are tool execution
+      // errors (isError: true), not protocol errors, so the model can self-correct.
+      if (error instanceof ZodError) {
+        return formatValidationError(name, error);
+      }
+
+      throw error;
+    }
   }
 }

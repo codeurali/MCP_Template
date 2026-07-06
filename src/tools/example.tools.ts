@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { NotFoundError, type ExampleApiClient } from "../example-client/client.js";
-import { formatData, formatList } from "./output.utils.js";
+import { buildOutputSchema, formatData, formatList } from "./output.utils.js";
 import type { ToolDefinition, ToolResult } from "./tool-registry.js";
 
 const GetThingSchema = z.object({
@@ -43,6 +43,10 @@ export const exampleTools: ToolDefinition[] = [
       required: ["id"],
       additionalProperties: false
     },
+    outputSchema: buildOutputSchema({
+      type: "object",
+      description: "The requested thing, or { error: 'NOT_FOUND', id } when missing"
+    }),
     annotations: {
       readOnlyHint: true,
       destructiveHint: false,
@@ -73,6 +77,14 @@ export const exampleTools: ToolDefinition[] = [
       required: [],
       additionalProperties: false
     },
+    outputSchema: buildOutputSchema({
+      type: "object",
+      properties: {
+        total: { type: "number", description: "Number of items returned" },
+        items: { type: "array", items: { type: "object" } }
+      },
+      required: ["total", "items"]
+    }),
     annotations: {
       readOnlyHint: true,
       destructiveHint: false,
@@ -104,6 +116,15 @@ export const exampleTools: ToolDefinition[] = [
       required: ["id", "confirmation"],
       additionalProperties: false
     },
+    outputSchema: buildOutputSchema({
+      type: "object",
+      properties: {
+        id: { type: "string" },
+        deleted: { type: "boolean" },
+        error: { type: "string", description: "Present only on failure, e.g. NOT_FOUND" }
+      },
+      required: ["id", "deleted"]
+    }),
     annotations: {
       readOnlyHint: false,
       destructiveHint: true,

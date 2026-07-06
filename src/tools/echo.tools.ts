@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { CliExitError } from "../cli-client/cli-client.js";
-import { formatData } from "./output.utils.js";
+import { buildOutputSchema, formatData } from "./output.utils.js";
 import type { ToolDefinition, ToolResult } from "./tool-registry.js";
 import type { CliClient } from "../cli-client/cli-client.js";
 
@@ -28,6 +28,15 @@ export const echoTools: ToolDefinition[] = [
       required: ["message"],
       additionalProperties: false
     },
+    outputSchema: buildOutputSchema({
+      type: "object",
+      properties: {
+        output: { type: "string", description: "Raw stdout on success" },
+        error: { type: "string", description: "Present only on failure, e.g. CLI_ERROR" },
+        exitCode: { type: "number" },
+        stderr: { type: "string" }
+      }
+    }),
     annotations: {
       readOnlyHint: true,
       destructiveHint: false,

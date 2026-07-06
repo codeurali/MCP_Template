@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeEach } from "@jest/globals";
+import { describe, expect, it } from "@jest/globals";
 import { CliClient, CliExitError, CliJsonParseError } from "../../src/cli-client/cli-client.js";
 import type { CliConfig } from "../../src/config/config.schema.js";
 
